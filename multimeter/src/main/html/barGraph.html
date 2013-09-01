@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 12px Verdana;
+}
+
+.axis path,
+.axis line {
+  fill: orange;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+  border: medium;
+  border-color: #bbbbbb;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.valueDiv {
+	position: absolute; 
+	width:200px; 
+	height:60px; 
+	background-color: #eeeeee; 
+	border: solid 1px;
+	border-color:#dddddd;
+	left:400px; top:20px;
+	font-family: Tahoma;
+	color: steelblue;
+	font-size: 50px;
+	text-align: right;
+	padding: 5px;
+	
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<div class="valueDiv">4.25 V</div>
+
+<script type="text/javascript">
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+.range([0, width]);
+
+var y = d3.scale.linear()
+.range([height, 0]);
+
+var yAxis = d3.svg.axis()
+.scale(y)
+.orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//generate a bunch of random data
+//start with 50 dot's.
+var data = new Array();
+for (var i=0;i<50;i++) {
+	data.push({x:i*(width/50),y:Math.random()*10 - 5 });
+}
+var buffer = new Array();
+
+setInterval(function(){
+	//add to a buffer
+	
+	buffer.push({x:0,y:parseFloat(Math.random()*10-5)});
+},100);
+
+  x.domain(data.map(function(d) { return d.x; }));
+  y.domain([-5, 5]);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Volts");
+  
+  var selector = svg.selectAll(".bar")
+  .data(data);
+  
+  selector.enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", function(d) { return d.x; })
+  .attr("width", width/50 - 1)
+  .attr("y", function(d) { return y(d.y); })
+  .attr("height", function(d) { return height - y(d.y); });
+
+selector.exit().remove();  
+
+//add the zero line
+svg.append("rect")
+ .attr("x", 0)
+ .attr("y", height/2 - 2)
+ .attr("height", 4)
+ .attr("width", width)
+ .attr("fill", "orange");
+
+  update();
+  
+  setInterval(function() {
+		if (buffer.length>20) {
+			buffer.splice(0,20);
+			console.log("overflow!");
+		}
+		
+		if (buffer.length > 0) {
+			data.splice(0,1);
+			data.push(buffer[0]);
+  			buffer.splice(0,1);
+		} else {
+			data.push({x:data[data.length - 1].x, y:data[data.length - 1].y});
+			data.splice(0,1);
+			
+		}
+		for (var i=0; i<data.length;i++) {
+			data[i].x=i*(width/50);
+		}
+		update();
+  },100);
+  
+  function update() {
+	  var selector = svg.selectAll(".bar")
+      .data(data);
+      
+  
+  selector
+  	  .attr("x", function(d) { return d.x; })
+	  .attr("y", function(d) { return Math.min(y(d.y),y(0)); })
+	  .attr("height", function(d) { return Math.abs(y(d.y)-height/2); });//height - y(d.y); });
+      
+	  d3.select(".valueDiv").text(data[data.length-1].y.toFixed(2) + " V");
+  
+  }
+
+//});
+</script>
