@@ -1,0 +1,2 @@
+Class-Path: Java-WebSocket-1.3.0.jar pi4j-core.jar pi4j-device.jar pi4j-gpio-extension.jar pi4j-service.jar
+Main-Class: mk.hsilomedus.multimeter.MultimeterServer

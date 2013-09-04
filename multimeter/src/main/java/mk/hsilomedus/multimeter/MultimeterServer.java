@@ -27,13 +27,13 @@ import com.pi4j.io.gpio.RaspiPin;
  * the program(s) have been supplied.
  */
 
-public class HsiServer extends WebSocketServer {
+public class MultimeterServer extends WebSocketServer {
 
-  public HsiServer(int port) throws UnknownHostException {
+  public MultimeterServer(int port) throws UnknownHostException {
     super(new InetSocketAddress(port));
   }
 
-  public HsiServer(InetSocketAddress address) {
+  public MultimeterServer(InetSocketAddress address) {
     super(address);
   }
 
@@ -112,7 +112,7 @@ public class HsiServer extends WebSocketServer {
       port = Integer.parseInt(args[0]);
     } catch (Exception ex) {
     }
-    HsiServer s = new HsiServer(port);
+    MultimeterServer s = new MultimeterServer(port);
     s.start();
     System.out.println("ChatServer started on port: " + s.getPort());
 
