@@ -15,7 +15,7 @@ copy manifest.mf mantarget\
 echo Compile
 REM javac -d mantarget -cp libs\* src\main\java\mk\hsilomedus\multimeter\*.java
 dir /s /B *.java > sources.txt
-javac -d mantarget -cp libs\* @sources.txt
+javac -d mantarget @sources.txt
 del sources.txt
 
 cd mantarget
