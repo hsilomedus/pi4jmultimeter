@@ -282,6 +282,7 @@ public abstract class WebSocketServer extends WebSocketAdapter implements Runnab
 			server.configureBlocking( false );
 			ServerSocket socket = server.socket();
 			socket.setReceiveBufferSize( WebSocketImpl.RCVBUF );
+			socket.setPerformancePreferences(0, 2, 1);
 			socket.bind( address );
 			selector = Selector.open();
 			server.register( selector, server.validOps() );
