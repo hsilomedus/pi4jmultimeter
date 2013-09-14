@@ -1,20 +1,18 @@
 package mk.hsilomedus.multimeter;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 
 import org.java_websocket.WebSocket;
-import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalInput;
-import com.pi4j.io.gpio.PinPullResistance;
-import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.serial.Serial;
+import com.pi4j.io.serial.SerialDataEvent;
+import com.pi4j.io.serial.SerialDataListener;
+import com.pi4j.io.serial.SerialFactory;
+import com.pi4j.io.serial.SerialPortException;
 
 
 /*
@@ -106,21 +104,74 @@ public class MultimeterServer extends WebSocketServer {
 //    Thread thr = new Thread(reader);
 //    thr.start();
     
-    WebSocketImpl.DEBUG = false;
-    int port = 8887; // 843 flash policy port
-    try {
-      port = Integer.parseInt(args[0]);
-    } catch (Exception ex) {
-    }
-    MultimeterServer s = new MultimeterServer(port);
-    s.start();
-    System.out.println("ChatServer started on port: " + s.getPort());
+//    WebSocketImpl.DEBUG = false;
+//    int port = 8887; // 843 flash policy port
+//    try {
+//      port = Integer.parseInt(args[0]);
+//    } catch (Exception ex) {
+//    }
+//    MultimeterServer s = new MultimeterServer(port);
+//    s.start();
+//    System.out.println("ChatServer started on port: " + s.getPort());
+//
+//    BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
+//    while (true) {
+//      String in = sysin.readLine();
+////      s.sendToAll(in);
+//    }
+    
+    final Serial serial = SerialFactory.createInstance();
 
-    BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
-    while (true) {
-      String in = sysin.readLine();
-//      s.sendToAll(in);
+    // create and register the serial data listener
+    serial.addListener(new SerialDataListener() {
+        @Override
+        public void dataReceived(SerialDataEvent event) {
+            // print out the data received to the console
+            System.out.print(event.getData());
+        }            
+    });
+            
+    try {
+        // open the default serial port provided on the GPIO header
+        serial.open(Serial.DEFAULT_COM_PORT, 115200);
+        
+        // continuous loop to keep the program running until the user terminates the program
+        for (;;) {
+            try {
+              serial.write(""+ ((int)(Math.random() * 200)));
+              Thread.sleep(100);
+                // write a formatted string to the serial transmit buffer
+                //serial.write("CURRENT TIME: %s", new Date().toString());
+
+                // write a individual bytes to the serial transmit buffer
+                //serial.write((byte) 13);
+                //serial.write((byte) 10);
+
+                // write a simple string to the serial transmit buffer
+                //serial.write("Second Line");
+
+                // write a individual characters to the serial transmit buffer
+                //serial.write('\r');
+                //serial.write('\n');
+
+                // write a string terminating with CR+LF to the serial transmit buffer
+                //serial.writeln("Third Line");
+            }
+            catch(IllegalStateException ex){
+                ex.printStackTrace();                    
+            }
+            
+            // wait 1 second before continuing
+            Thread.sleep(1000);
+        }
+        
     }
+    catch(SerialPortException ex) {
+        System.out.println(" ==>> SERIAL SETUP FAILED : " + ex.getMessage());
+        return;
+    }
+    
+    
   }
 
 }
