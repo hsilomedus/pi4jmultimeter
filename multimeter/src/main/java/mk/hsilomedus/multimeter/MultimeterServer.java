@@ -127,7 +127,7 @@ public class MultimeterServer extends WebSocketServer {
         @Override
         public void dataReceived(SerialDataEvent event) {
             // print out the data received to the console
-            System.out.print(event.getData());
+            System.out.println(event.getData());
         }            
     });
             
@@ -138,8 +138,8 @@ public class MultimeterServer extends WebSocketServer {
         // continuous loop to keep the program running until the user terminates the program
         for (;;) {
             try {
-              serial.write(""+ ((int)(Math.random() * 200)));
-              Thread.sleep(100);
+              //serial.write(""+ ((int)(Math.random() * 200)));
+              //Thread.sleep(100);
                 // write a formatted string to the serial transmit buffer
                 //serial.write("CURRENT TIME: %s", new Date().toString());
 
