@@ -100,7 +100,7 @@ public class MultimeterServer extends WebSocketServer {
             } catch (Exception exc) { }
             if (curValue == -1) {
               readValues.value = num;
-            } else {
+            } else if (curValue < 20) {
               readValues.bands[curValue] = num;
             }
             curValue++;
