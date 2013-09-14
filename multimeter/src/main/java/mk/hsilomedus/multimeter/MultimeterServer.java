@@ -2,6 +2,8 @@ package mk.hsilomedus.multimeter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
@@ -34,33 +36,43 @@ public class MultimeterServer extends WebSocketServer {
   public MultimeterServer(InetSocketAddress address) {
     super(address);
   }
+  
+  Set<WebSocket> conns = new HashSet<>(); 
 
   @Override
   public void onOpen(WebSocket conn, ClientHandshake handshake) {
-    MessageSenderFromTimeToTime.newInstance(conn);
+    conns.add(conn);
 
   }
 
   @Override
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-    // TODO Auto-generated method stub
+    conns.remove(conn);
 
   }
 
   @Override
   public void onMessage(WebSocket conn, String message) {
-    // TODO Auto-generated method stub
+    // TODO IT WANTS SOMETHING!!!!
 
   }
 
   @Override
   public void onError(WebSocket conn, Exception ex) {
-    // TODO Auto-generated method stub
+    conns.remove(conn);
 
   }
   
   public void broadcastData(ReadValues data) {
     System.out.println(System.currentTimeMillis());
+    String toSend = data.toString();
+    for (WebSocket conn : conns) {
+      try {
+        conn.send(toSend);
+      } catch (Exception exc) {
+        
+      }
+    }
   }
   
   
