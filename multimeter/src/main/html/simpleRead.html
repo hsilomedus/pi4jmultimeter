@@ -5,7 +5,7 @@ socket.onopen = function() { document.write("<b>Opened!</b><br/>"); };
 socket.onclose = function() { document.write("<b>Closed!</b><br/>"); };
 socket.onerror = function() { document.write("<b>Error!</b><br/>"); };
 socket.onmessage = function(a) {
-  document.write("Received:" + a.data);
+  document.write("Received:" + a.data + ": "+ a.data.v + "<br/>");
 }
 
 </script>
