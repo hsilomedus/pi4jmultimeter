@@ -2,9 +2,9 @@ package mk.hsilomedus.multimeter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.Date;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
@@ -59,76 +59,54 @@ public class MultimeterServer extends WebSocketServer {
 
   }
   
+  public void broadcastData(ReadValues data) {
+    System.out.println(System.currentTimeMillis());
+  }
+  
   
 
   public static void main(String[] args) throws InterruptedException, IOException {
+        
+    WebSocketImpl.DEBUG = false;
+    int port = 8887; 
     
-    //Initialize the GPIO stuff
-//    GpioController gpio = GpioFactory.getInstance();
-//    
-//    GpioPinDigitalInput[] pins = new GpioPinDigitalInput[10];
-//    //Initialize all the pins
-//    pins[0] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00,
-//        "MyButton0",
-//        PinPullResistance.PULL_DOWN);
-//    pins[1] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_01,
-//        "MyButton1",
-//        PinPullResistance.PULL_DOWN);
-//    pins[2] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02,
-//        "MyButton2",
-//        PinPullResistance.PULL_DOWN);
-//    pins[3] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_03,
-//        "MyButton3",
-//        PinPullResistance.PULL_DOWN);
-//    pins[4] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_04,
-//        "MyButton4",
-//        PinPullResistance.PULL_DOWN);
-//    pins[5] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_05,
-//        "MyButton5",
-//        PinPullResistance.PULL_DOWN);
-//    pins[6] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_06,
-//        "MyButton6",
-//        PinPullResistance.PULL_DOWN);
-//    pins[7] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_07,
-//        "MyButton7",
-//        PinPullResistance.PULL_DOWN);
-//    pins[8] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_08,
-//        "MyButton8",
-//        PinPullResistance.PULL_DOWN);
-//    pins[9] = gpio.provisionDigitalInputPin(RaspiPin.GPIO_09,
-//        "MyButton9",
-//        PinPullResistance.PULL_DOWN);
-//        
-//    //initialize and start the thread
-//    GPIOReader reader = new GPIOReader(gpio, pins);
-//    Thread thr = new Thread(reader);
-//    thr.start();
-    
-//    WebSocketImpl.DEBUG = false;
-//    int port = 8887; // 843 flash policy port
-//    try {
-//      port = Integer.parseInt(args[0]);
-//    } catch (Exception ex) {
-//    }
-//    MultimeterServer s = new MultimeterServer(port);
-//    s.start();
-//    System.out.println("ChatServer started on port: " + s.getPort());
-//
-//    BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
-//    while (true) {
-//      String in = sysin.readLine();
-////      s.sendToAll(in);
-//    }
+    final MultimeterServer server = new MultimeterServer(port);
+    server.start();
+    System.out.println("ChatServer started on port: " + server.getPort());
     
     final Serial serial = SerialFactory.createInstance();
 
     // create and register the serial data listener
     serial.addListener(new SerialDataListener() {
-        @Override
-        public void dataReceived(SerialDataEvent event) {
-            // print out the data received to the console
-            System.out.println(System.currentTimeMillis() + " " + event.getData());
-        }            
+      
+      private ReadValues readValues = new ReadValues();
+      private int curValue = -1;
+      
+      @Override
+      public void dataReceived(SerialDataEvent event) {
+        // print out the data received to the console
+        String[]parts = event.getData().split("\\s+");
+        
+        for (int i = 0; i < parts.length; i++) {
+          if (parts[i].equals("S")) {
+            //commit the stuff
+            server.broadcastData(readValues);
+            readValues = new ReadValues(); //TODO: see if necessary
+            curValue = -1;
+          } else {
+            int num = 0;
+            try {
+              num = Integer.parseInt(parts[i], 16);
+            } catch (Exception exc) { }
+            if (curValue == -1) {
+              readValues.value = num;
+            } else {
+              readValues.bands[curValue] = num;
+            }
+            curValue++;
+          }
+        }
+      }            
     });
             
     try {
