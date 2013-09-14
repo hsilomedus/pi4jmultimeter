@@ -63,8 +63,17 @@ public class MultimeterServer extends WebSocketServer {
     System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
   }
   
-  public void broadcastData(ReadValues data) {
-    String toSend = data.toString();
+  private ReadValues currentData = null;
+  public void setData(ReadValues data) {
+    this.currentData = data;
+    
+  }
+  
+  public void broadcastLastData() {
+    if (currentData == null) {
+      return;
+    }
+    String toSend = currentData.toString();
     for (WebSocket conn : conns) {
       try {
         conn.send(toSend);
@@ -101,7 +110,7 @@ public class MultimeterServer extends WebSocketServer {
         for (int i = 0; i < parts.length; i++) {
           if (parts[i].equals("S")) {
             //commit the stuff
-            server.broadcastData(readValues);
+            server.setData(readValues);
             readValues = new ReadValues(); //TODO: see if necessary
             curValue = -1;
           } else {
@@ -129,6 +138,16 @@ public class MultimeterServer extends WebSocketServer {
         return;
     }
     
+    //send data from time to time
+    while (true) {
+      try {
+        Thread.sleep(20);
+        server.broadcastLastData();
+      } catch (Exception exc) {
+        
+      }
+      
+    }
     
   }
 
