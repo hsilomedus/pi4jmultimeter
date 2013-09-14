@@ -42,13 +42,13 @@ public class MultimeterServer extends WebSocketServer {
   @Override
   public void onOpen(WebSocket conn, ClientHandshake handshake) {
     conns.add(conn);
-
+    System.out.println("New connection from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
   }
 
   @Override
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
     conns.remove(conn);
-
+    System.out.println("Closed connection to " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
   }
 
   @Override
@@ -60,11 +60,10 @@ public class MultimeterServer extends WebSocketServer {
   @Override
   public void onError(WebSocket conn, Exception ex) {
     conns.remove(conn);
-
+    System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
   }
   
   public void broadcastData(ReadValues data) {
-//    System.out.println(System.currentTimeMillis());
     String toSend = data.toString();
     for (WebSocket conn : conns) {
       try {

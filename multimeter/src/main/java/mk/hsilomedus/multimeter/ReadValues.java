@@ -27,6 +27,6 @@ public class ReadValues {
       bld.append(bands[i]);
     }
     bld.append("]}");
-    return super.toString();
+    return bld.toString();
   }
 }
