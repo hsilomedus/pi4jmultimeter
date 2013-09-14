@@ -127,7 +127,7 @@ public class MultimeterServer extends WebSocketServer {
         @Override
         public void dataReceived(SerialDataEvent event) {
             // print out the data received to the console
-            System.out.println(event.getData());
+            System.out.println(System.currentTimeMillis() + " " + event.getData());
         }            
     });
             
