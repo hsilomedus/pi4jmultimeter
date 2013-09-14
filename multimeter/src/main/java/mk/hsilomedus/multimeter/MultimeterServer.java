@@ -134,39 +134,8 @@ public class MultimeterServer extends WebSocketServer {
     try {
         // open the default serial port provided on the GPIO header
         serial.open(Serial.DEFAULT_COM_PORT, 115200);
-        
-        // continuous loop to keep the program running until the user terminates the program
-        for (;;) {
-            try {
-              //serial.write(""+ ((int)(Math.random() * 200)));
-              //Thread.sleep(100);
-                // write a formatted string to the serial transmit buffer
-                //serial.write("CURRENT TIME: %s", new Date().toString());
-
-                // write a individual bytes to the serial transmit buffer
-                //serial.write((byte) 13);
-                //serial.write((byte) 10);
-
-                // write a simple string to the serial transmit buffer
-                //serial.write("Second Line");
-
-                // write a individual characters to the serial transmit buffer
-                //serial.write('\r');
-                //serial.write('\n');
-
-                // write a string terminating with CR+LF to the serial transmit buffer
-                //serial.writeln("Third Line");
-            }
-            catch(IllegalStateException ex){
-                ex.printStackTrace();                    
-            }
-            
-            // wait 1 second before continuing
-            Thread.sleep(1000);
-        }
-        
-    }
-    catch(SerialPortException ex) {
+                
+    } catch (SerialPortException ex) {
         System.out.println(" ==>> SERIAL SETUP FAILED : " + ex.getMessage());
         return;
     }
