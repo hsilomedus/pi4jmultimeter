@@ -82,9 +82,9 @@ var buffer = new Array();
 //},100);
 
 var socket = new WebSocket("ws://" + document.domain + ":8887/");
-socket.onopen = function() { document.write("<b>Opened!</b><br/>"); };
-socket.onclose = function() { document.write("<b>Closed!</b><br/>"); };
-socket.onerror = function() { document.write("<b>Error!</b><br/>"); };
+socket.onopen = function() { console.log("Opened socket."); };
+socket.onclose = function() { console.log("Closed socket."); };
+socket.onerror = function() { console.log("Error during transfer."); };
 socket.onmessage = function(a) {
   buffer.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
 }
