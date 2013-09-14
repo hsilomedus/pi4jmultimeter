@@ -113,7 +113,7 @@ public class MultimeterServer extends WebSocketServer {
           if (parts[i].equals("S")) {
             //commit the stuff
             server.setData(readValues);
-            readValues = new ReadValues(); //TODO: see if necessary
+            //readValues = new ReadValues(); //TODO: see if necessary
             curValue = -1;
           } else {
             int num = 0;

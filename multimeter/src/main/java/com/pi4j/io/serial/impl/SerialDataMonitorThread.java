@@ -64,7 +64,7 @@ import com.pi4j.io.serial.SerialDataListener;
  */
 public class SerialDataMonitorThread extends Thread {
 
-    public static final int DELAY = 10; // milliseconds
+    public static final int DELAY = 15; // milliseconds
     private boolean exiting = false;
     private final Serial serial;
     private final List<SerialDataListener> listeners;
