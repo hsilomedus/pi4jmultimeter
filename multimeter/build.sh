@@ -7,7 +7,8 @@ echo Create directory
 mkdir mantarget
 echo Copy manifest
 cp ./manifest.mf mantarget/
-cp ./native/* mantarget/
+echo Copy native libs
+cp -r ./native/* mantarget/
 echo Compile
 find -name "*.java" > sources.txt
 javac -d mantarget @sources.txt
