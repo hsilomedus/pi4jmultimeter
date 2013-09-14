@@ -109,11 +109,11 @@ socket.onmessage = function(a) {
 
 
 setInterval(function() {
-	if (data.length>60) {
-		data.splice(0,data.length-199);
+	if (data.length>50) {
+		data.splice(0,data.length-50);
 		console.log("overflow!");
 	}
-	if (data.length>50) {
+	if (data.length==50) {
 		data.splice(0,1);
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i;
