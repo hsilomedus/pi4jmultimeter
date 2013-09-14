@@ -111,10 +111,10 @@ socket.onmessage = function(a) {
 setInterval(function() {
 	if (data.length>50) {
 		data.splice(0,data.length-50);
-		console.log("overflow!");
+		//console.log("overflow!");
 	}
-	if (data.length==50) {
-		data.splice(0,1);
+	//if (data.length==50) {
+		//data.splice(0,1);
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i;
 		}
@@ -122,7 +122,7 @@ setInterval(function() {
 		  .datum(data)
 		  .attr("class", "line")
 		  .attr("d", line);
-	}
+	//}
 }, 20);
 
 </script>
