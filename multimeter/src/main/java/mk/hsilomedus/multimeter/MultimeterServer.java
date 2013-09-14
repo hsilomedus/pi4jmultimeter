@@ -106,7 +106,7 @@ public class MultimeterServer extends WebSocketServer {
       public void dataReceived(SerialDataEvent event) {
         // print out the data received to the console
         String received = event.getData();
-        System.out.println(System.currentTimeMillis() +" " + received);
+        //System.out.println(System.currentTimeMillis() +" " + received);
         String[]parts = received.split("\\s+");
         
         for (int i = 0; i < parts.length; i++) {
