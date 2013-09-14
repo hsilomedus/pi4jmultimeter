@@ -59,7 +59,7 @@ var svg = d3.select("body").append("svg")
 //start with 50 dot's.
 var data = new Array();
 for (var i=0;i<50;i++) {
-	data.push({x:i,y:Math.random()*10 - 5});
+	data.push({x:i,y:0});
 }
 	
 
@@ -89,15 +89,24 @@ for (var i=0;i<50;i++) {
    .attr("width", width)
    .attr("fill", "orange");
 	   
-setInterval(function(){
+//setInterval(function(){
 	//add to a buffer
 	
 	//add new stuff
-	data.push({x:0,y:Math.random() * 10 - 5});
+	//data.push({x:0,y:Math.random() * 10 - 5});
 	//change all others
 	
 
-}, 20);
+//}, 20);
+
+var socket = new WebSocket("ws://" + document.domain + ":8887/");
+socket.onopen = function() { console.log("Opened socket."); };
+socket.onclose = function() { console.log("Closed socket."); };
+socket.onerror = function() { console.log("Error during transfer."); };
+socket.onmessage = function(a) {
+  data.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
+}
+
 
 setInterval(function() {
 	if (data.length>60) {
