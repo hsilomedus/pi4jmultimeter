@@ -71,15 +71,23 @@ var svg = d3.select("body").append("svg")
 //start with 50 dot's.
 var data = new Array();
 for (var i=0;i<50;i++) {
-	data.push({x:i*(width/50),y:Math.random()*10 - 5 });
+	data.push({x:i*(width/50),y:0 });
 }
 var buffer = new Array();
 
-setInterval(function(){
-	//add to a buffer
-	
-	buffer.push({x:0,y:parseFloat(Math.random()*10-5)});
-},100);
+//setInterval(function(){
+//	//add to a buffer
+//	
+//	buffer.push({x:0,y:parseFloat(Math.random()*10-5)});
+//},100);
+
+var socket = new WebSocket("ws://" + document.domain + ":8887/");
+socket.onopen = function() { document.write("<b>Opened!</b><br/>"); };
+socket.onclose = function() { document.write("<b>Closed!</b><br/>"); };
+socket.onerror = function() { document.write("<b>Error!</b><br/>"); };
+socket.onmessage = function(a) {
+  buffer.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
+}
 
   x.domain(data.map(function(d) { return d.x; }));
   y.domain([-5, 5]);
