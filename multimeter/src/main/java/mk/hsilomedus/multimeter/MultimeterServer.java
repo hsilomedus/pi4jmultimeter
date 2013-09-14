@@ -64,7 +64,7 @@ public class MultimeterServer extends WebSocketServer {
   }
   
   public void broadcastData(ReadValues data) {
-    System.out.println(System.currentTimeMillis());
+//    System.out.println(System.currentTimeMillis());
     String toSend = data.toString();
     for (WebSocket conn : conns) {
       try {
