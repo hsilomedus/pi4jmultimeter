@@ -143,7 +143,7 @@ public class MultimeterServer extends WebSocketServer {
     //send data from time to time
     while (true) {
       try {
-        Thread.sleep(20);
+        Thread.sleep(10);
         server.broadcastLastData();
       } catch (Exception exc) {
         
