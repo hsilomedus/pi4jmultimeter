@@ -92,7 +92,7 @@ public class MultimeterServer extends WebSocketServer {
     
     final MultimeterServer server = new MultimeterServer(port);
     server.start();
-    System.out.println("ChatServer started on port: " + server.getPort());
+    System.out.println("MultimeterServer started on port: " + server.getPort());
     
     final Serial serial = SerialFactory.createInstance();
 
