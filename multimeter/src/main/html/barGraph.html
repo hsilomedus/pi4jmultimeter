@@ -145,7 +145,7 @@ svg.append("rect")
 		//}
 		
 		data.splice(0,1);
-		data.push({x:0, JSON.parse(lastReceivedValue).v});
+		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).v / 204.6)});
 		
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i*(width/50);
