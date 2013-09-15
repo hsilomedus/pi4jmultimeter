@@ -57,32 +57,60 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //generate a bunch of random data
-//start with 50 dot's.
+//start with 20 dot's.
 var data = new Array();
 var overdata = new Array();
 
 for (var i=0;i<20;i++) {
-	data.push({x:i*(width/20),y:Math.random()*10 - 30});
+	data.push({x:i*(width/20),y:-128);
 	overdata.push({x:data[i].x,y:data[i].y});
 }
 var buffer = new Array();
 
+var lastReceivedValue = null;
+var socket = new WebSocket("ws://" + document.domain + ":8887/");
+socket.onopen = function() { console.log("Opened socket."); };
+socket.onclose = function() { console.log("Closed socket."); };
+socket.onerror = function() { console.log("Error during transfer."); };
+socket.onmessage = function(a) {
+  //buffer.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
+  lastReceivedValue = a.data;
+}
+
 setInterval(function(){
 	//add to a buffer
-	for (var i=0;i<20;i++) {
-		data[i].y = data[i].y + Math.random()*10 - 5;
-		if (data[i].y > -5) {
-			data[i].y = -5;
-		}
-		if (data[i].y < -50) {
-			data[i].y = -50;
-		}
+// 	for (var i=0;i<20;i++) {
+// 		data[i].y = data[i].y + Math.random()*10 - 5;
+// 		if (data[i].y > -5) {
+// 			data[i].y = -5;
+// 		}
+// 		if (data[i].y < -50) {
+// 			data[i].y = -50;
+// 		}
 		
+// 	}
+	
+	//move the last fetched value
+	if (lastReceivedValue == null) {
+	  return;
 	}
+	var value = JSON.parse(lastReceivedValue);
+	for (var i=0;i<20;i++) {
+    data[i].y = value.d[i] - 128;
+    
+    //trim the overloads
+    if (data[i].y > -5) {
+     data[i].y = -5;
+    }
+    if (data[i].y < -128) {
+     data[i].y = -128;
+    }
+	}
+
 },100);
 
   x.domain(data.map(function(d) { return d.x; }));
-  y.domain([-50, 0]);
+  y.domain([-128, 0]);
 
   svg.append("g")
       .attr("class", "y axis")
