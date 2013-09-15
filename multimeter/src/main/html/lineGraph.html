@@ -99,25 +99,36 @@ for (var i=0;i<50;i++) {
 
 //}, 20);
 
+var lastReceivedValue = null;
 var socket = new WebSocket("ws://" + document.domain + ":8887/");
 socket.onopen = function() { console.log("Opened socket."); };
 socket.onclose = function() { console.log("Closed socket."); };
 socket.onerror = function() { console.log("Error during transfer."); };
 socket.onmessage = function(a) {
-  data.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
+  //data.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
+  lastReceivedValue = a.data;
 }
 
 
 setInterval(function() {
-	if (data.length>50) {
-		data.splice(0,data.length-50);
+	//if (data.length>50) {
+	//	data.splice(0,data.length-50);
 		//console.log("overflow!");
-	}
+	//}
 	//if (data.length==50) {
 		//data.splice(0,1);
+		
+		if (lastReceivedValue == null) {
+      return;
+    }
+		
+		data.splice(0,1);
+		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).v / 204.6)});
+		
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i;
 		}
+		
 		svg.select(".line")
 		  .datum(data)
 		  .attr("class", "line")
