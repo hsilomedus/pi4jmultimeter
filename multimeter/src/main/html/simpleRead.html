@@ -1,11 +1,18 @@
 <script>
 
+var i=0;
 var socket = new WebSocket("ws://" + document.domain + ":8887/");
 socket.onopen = function() { document.write("<b>Opened!</b><br/>"); };
 socket.onclose = function() { document.write("<b>Closed!</b><br/>"); };
 socket.onerror = function() { document.write("<b>Error!</b><br/>"); };
 socket.onmessage = function(a) {
-  document.write("Received:" + a.data + ": "+ JSON.parse(a.data).v + "<br/>");
+  //document.write("Received:" + a.data + ": "+ JSON.parse(a.data).v + "<br/>");
+  document.write(".");
+  i++;
+  if (i==100) {
+    document.write("<br/>");
+    i = 0;
+  }
 }
 
 </script>
