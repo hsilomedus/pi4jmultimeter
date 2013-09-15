@@ -251,11 +251,13 @@ void setup() {
 void loop() {
   nopack++;
   
-  val = analogRead(A0);
+  val = analogRead(A1);
   if (nopack % 5 == 0) {
     for (i=0; i < 128; i++) {                                     // We don't go for clean timing here, it's
-      val = analogRead(A0);                                      // better to get somewhat dirty data fast
-      data[i] = val/4 -128;                                       // than to get data that's lab-accurate
+      val = analogRead(A1);                                      // better to get somewhat dirty data fast
+      //values from 0 to 2.5-> 0 > 512,to be changed to -128 to 128
+      data[i] = val/2 - 128;
+      //data[i] = val/4 -128;                                       // than to get data that's lab-accurate
       im[i] = 0;                                                       // but too slow, for this application.
     }
     

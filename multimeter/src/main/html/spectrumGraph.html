@@ -62,7 +62,7 @@ var data = new Array();
 var overdata = new Array();
 
 for (var i=0;i<20;i++) {
-	data.push({x:i*(width/20),y:-128});
+	data.push({x:i*(width/20),y:-64});
 	overdata.push({x:data[i].x,y:data[i].y});
 }
 var buffer = new Array();
@@ -96,21 +96,21 @@ setInterval(function(){
 	}
 	var value = JSON.parse(lastReceivedValue);
 	for (var i=0;i<20;i++) {
-    data[i].y = value.d[i] - 128;
+    data[i].y = value.d[i] - 64;
     
     //trim the overloads
     if (data[i].y > -5) {
      data[i].y = -5;
     }
-    if (data[i].y < -128) {
-     data[i].y = -128;
+    if (data[i].y < -64) {
+     data[i].y = -64;
     }
 	}
 
 },100);
 
   x.domain(data.map(function(d) { return d.x; }));
-  y.domain([-128, 0]);
+  y.domain([-64, 0]);
 
   svg.append("g")
       .attr("class", "y axis")
@@ -167,7 +167,7 @@ svg.append("rect")
   
   //update overdata
   for (var i=0;i<20;i++) {
-  	if (overdata[i].y >= -49) {
+  	if (overdata[i].y >= -63) {
 		overdata[i].y -= 1;
 	}
 	
