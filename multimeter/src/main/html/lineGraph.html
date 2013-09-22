@@ -88,16 +88,6 @@ for (var i=0;i<50;i++) {
    .attr("height", 4)
    .attr("width", width)
    .attr("fill", "orange");
-	   
-//setInterval(function(){
-	//add to a buffer
-	
-	//add new stuff
-	//data.push({x:0,y:Math.random() * 10 - 5});
-	//change all others
-	
-
-//}, 20);
 
 var lastReceivedValue = null;
 var socket = new WebSocket("ws://" + document.domain + ":8887/");
@@ -105,18 +95,11 @@ socket.onopen = function() { console.log("Opened socket."); };
 socket.onclose = function() { console.log("Closed socket."); };
 socket.onerror = function() { console.log("Error during transfer."); };
 socket.onmessage = function(a) {
-  //data.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
   lastReceivedValue = a.data;
 }
 
 
 setInterval(function() {
-	//if (data.length>50) {
-	//	data.splice(0,data.length-50);
-		//console.log("overflow!");
-	//}
-	//if (data.length==50) {
-		//data.splice(0,1);
 		
 		if (lastReceivedValue == null) {
       return;
@@ -133,7 +116,6 @@ setInterval(function() {
 		  .datum(data)
 		  .attr("class", "line")
 		  .attr("d", line);
-	//}
 }, 20);
 
 </script>

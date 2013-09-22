@@ -65,7 +65,6 @@ for (var i=0;i<20;i++) {
 	data.push({x:i*(width/20),y:-64});
 	overdata.push({x:data[i].x,y:data[i].y});
 }
-var buffer = new Array();
 
 var lastReceivedValue = null;
 var socket = new WebSocket("ws://" + document.domain + ":8887/");
@@ -73,22 +72,10 @@ socket.onopen = function() { console.log("Opened socket."); };
 socket.onclose = function() { console.log("Closed socket."); };
 socket.onerror = function() { console.log("Error during transfer."); };
 socket.onmessage = function(a) {
-  //buffer.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
   lastReceivedValue = a.data;
 }
 
 setInterval(function(){
-	//add to a buffer
-// 	for (var i=0;i<20;i++) {
-// 		data[i].y = data[i].y + Math.random()*10 - 5;
-// 		if (data[i].y > -5) {
-// 			data[i].y = -5;
-// 		}
-// 		if (data[i].y < -50) {
-// 			data[i].y = -50;
-// 		}
-		
-// 	}
 	
 	//move the last fetched value
 	if (lastReceivedValue == null) {
@@ -183,6 +170,4 @@ svg.append("rect")
       
   
   }
-
-//});
 </script>

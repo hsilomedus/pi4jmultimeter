@@ -73,20 +73,13 @@ var data = new Array();
 for (var i=0;i<50;i++) {
 	data.push({x:i*(width/50),y:0 });
 }
-var buffer = new Array();
 
-//setInterval(function(){
-//	//add to a buffer
-//	
-//	buffer.push({x:0,y:parseFloat(Math.random()*10-5)});
-//},100);
 var lastReceivedValue = null;
 var socket = new WebSocket("ws://" + document.domain + ":8887/");
 socket.onopen = function() { console.log("Opened socket."); };
 socket.onclose = function() { console.log("Closed socket."); };
 socket.onerror = function() { console.log("Error during transfer."); };
 socket.onmessage = function(a) {
-  //buffer.push({x:0,y:parseFloat(JSON.parse(a.data).v / 204.6) });
   lastReceivedValue = a.data;
 }
 
@@ -126,24 +119,10 @@ svg.append("rect")
   update();
   
   setInterval(function() {
-		//if (buffer.length>20) {
-		//	buffer.splice(0,20);
-		//	console.log("overflow!");
-		//}
 		if (lastReceivedValue == null) {
 		  return;
 		}
-		
-		//if (buffer.length > 0) {
-		//	data.splice(0,1);
-		//	data.push(buffer[0]);
-  	//		buffer.splice(0,1);
-		//} else {
-		//	data.push({x:data[data.length - 1].x, y:data[data.length - 1].y});
-		//	data.splice(0,1);
-			
-		//}
-		
+				
 		data.splice(0,1);
 		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).v / 204.6)});
 		

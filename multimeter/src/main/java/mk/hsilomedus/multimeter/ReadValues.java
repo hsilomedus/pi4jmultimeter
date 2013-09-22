@@ -1,12 +1,4 @@
-/*
- * Copyright (C) 2013 by Netcetera AG.
- * All rights reserved.
- *
- * The copyright to the computer program(s) herein is the property of Netcetera AG, Switzerland.
- * The program(s) may be used and/or copied only with the written permission of Netcetera AG or
- * in accordance with the terms and conditions stipulated in the agreement/contract under which 
- * the program(s) have been supplied.
- */
+
 package mk.hsilomedus.multimeter;
 
 
@@ -26,6 +18,7 @@ public class ReadValues {
       }
       bld.append(bands[i]);
     }
+    //Add some padding to avoid buffering and network lag.
     bld.append("],\"extraPadding\":\"dkfjgshdf dkf hsdkf hsdkf hsdkfhjgksdjg sdfg sdf gsdfg sdfgsdfgsdfgsdfgoiioihoih" +
     		"lldksfjglskfdlg ksdjf lsdfgsldf jsdfgisdfogijdsofgi jsdofgi sdofigjdsofi jgsodif jodsif gsdfg o" +
     		"osdfigsdfg sfdg sdfgsdfg sfdg sdf gsdfg sdf gsdf gsdfg sdf sdf gsfd sdfg sd fgsdgfsdf gsdfg sd gf" +

@@ -16,17 +16,6 @@ import com.pi4j.io.serial.SerialDataListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.SerialPortException;
 
-
-/*
- * Copyright (C) 2013 by Netcetera AG.
- * All rights reserved.
- *
- * The copyright to the computer program(s) herein is the property of Netcetera AG, Switzerland.
- * The program(s) may be used and/or copied only with the written permission of Netcetera AG or
- * in accordance with the terms and conditions stipulated in the agreement/contract under which 
- * the program(s) have been supplied.
- */
-
 public class MultimeterServer extends WebSocketServer {
 
   public MultimeterServer(int port) throws UnknownHostException {
@@ -104,16 +93,13 @@ public class MultimeterServer extends WebSocketServer {
       
       @Override
       public void dataReceived(SerialDataEvent event) {
-        // print out the data received to the console
         String received = event.getData();
-        //System.out.println(System.currentTimeMillis() +" " + received);
         String[]parts = received.split("\\s+");
         
         for (int i = 0; i < parts.length; i++) {
           if (parts[i].equals("S")) {
             //commit the stuff
             server.setData(readValues);
-            //readValues = new ReadValues(); //TODO: see if necessary
             curValue = -1;
           } else {
             int num = 0;
