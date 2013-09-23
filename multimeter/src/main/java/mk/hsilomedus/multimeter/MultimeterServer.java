@@ -52,7 +52,7 @@ public class MultimeterServer extends WebSocketServer {
     System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
   }
   
-  private ReadValues currentData = null;
+  private ReadValues currentData = new ReadValues();
   public void setData(ReadValues data) {
     this.currentData = data;
     
