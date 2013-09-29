@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<title>Spectrum graph - pi4jmultimeter</title>
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<style>
+
+body {
+  font: 12px Verdana;
+}
+
+.axis path,
+.axis line {
+  fill: orange;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+  border: medium;
+  border-color: #bbbbbb;
+}
+
+.overbar {
+  fill: teal;
+  border: medium;
+  border-color: #bbbbbb;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+</head>
+<body>
+<script src="js/d3.v3.min.js"></script>
+
+
+<script type="text/javascript">
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+.range([0, width]);
+
+//from 0 to 500kOhms
+x.domain([0, 500]);
+
+var xAxis = d3.svg.axis()
+.scale(x)
+.orient("bottom");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+var button = d3.select("body").append("div").append("a");
+button.text("Go back");
+button.style("margin-left", margin.left+"px");
+button.classed("btn", true).classed("btn-primary", true).classed("btn-lg", true);
+button.attr("href","index.html");
+
+//generate a bunch of random data
+//start with 20 dot's.
+var data = new Array();
+
+for (var i=0;i<1;i++) {
+	data.push({v:150});
+}
+
+var lastReceivedValue = null;
+
+//comment afterwards
+
+setInterval(function(){
+	
+	//move the last fetched value
+	if (lastReceivedValue == null) {
+	  return;
+	}
+	var value = JSON.parse(lastReceivedValue);
+	for (var i=0;i<20;i++) {
+    data[i].y = value.d[i] - 64;
+    
+    //trim the overloads
+    if (data[i].y > -5) {
+     data[i].y = -5;
+    }
+    if (data[i].y < -64) {
+     data[i].y = -64;
+    }
+	}
+
+},100);
+
+  
+  
+  var selector = svg.selectAll(".bar")
+  .data(data);
+  
+  //bar
+  selector.enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", 0)
+  .attr("width", function(d) { return x(d.v); })
+  .attr("y", 20)
+  .attr("height", height - 20);
+  
+  //overbar
+  selector = svg.selectAll(".overbar")
+    .data(data);
+  
+  selector.enter().append("rect")
+    .attr("class", "overbar")
+    .attr("x", function(d) { return x(d.v) + 2; })
+    .attr("width", 5)
+    .attr("y", 20)
+    .attr("height", height - 20);
+  
+  //Value label
+  selector = svg.selectAll(".valueLabel")
+    .data(data);
+  
+  selector.enter().append("text")
+    .attr("class", "valueLabel")
+    .attr("x", function(d) { return x(d.v) + 12; })
+    .attr("y", height/2+20)
+    .attr("font-size", 48)
+    .attr("font-family", "Verdana") 
+    .attr("fill", "orange");
+  
+  
+  //label
+
+selector.exit().remove();  
+
+//add the zero line
+svg.append("rect")
+ .attr("x", 0)
+ .attr("y", height + 2)
+ .attr("height", 4)
+ .attr("width", width)
+ .attr("fill", "orange");
+
+
+svg.append("g")
+.attr("transform", "translate(" + 0 + "," + (height + 2) + ")")
+.attr("class", "x axis")
+.call(xAxis)
+.append("text")
+.attr("y", height + 2)
+.attr("dy", ".71em")
+.style("text-anchor", "end")
+.text("Ohms");
+
+  update();
+  
+  var maxResistance = 500;
+  
+  setInterval(function() {
+		update();
+  },25);
+  
+  function update() {
+    //Update bar
+	  var selector = svg.selectAll(".bar")
+      .data(data);
+    selector
+  	  .attr("width", function(d) { return x(Math.min(d.v, maxResistance)); });
+      
+    //Update overbar
+    selector = svg.selectAll(".overbar")
+    	.data(data);
+    selector
+      .attr("x", function(d) { return x(Math.min(d.v, maxResistance)) + 2; });
+    
+    //Update text
+    selector = svg.selectAll(".valueLabel")
+      .data(data);
+    selector
+      .attr("x", function(d) {
+        var retVal = x(Math.min(d.v, maxResistance)) + 12;
+        if (d.v > 400) {
+          retVal-= 200;
+        }
+        if (d.v > 500) {
+          retVal -= 50;
+        }
+        return retVal;
+      })
+      .text(function(d) {
+        if (d.v > 500) {
+          return "Overflow!";
+        } else {
+          return d.v+"K"+ (String.fromCharCode(937)); 
+        }
+      })
+  }
+  
+//   var socket = new WebSocket("ws://" + document.domain + ":8887/");
+//   socket.onopen = function() { console.log("Opened socket."); };
+//   socket.onclose = function() { console.log("Closed socket."); };
+//   socket.onerror = function() { console.log("Error during transfer."); };
+//   socket.onmessage = function(a) {
+//     lastReceivedValue = a.data;
+//   }
+
+ setInterval(function() {
+   data[0].v = parseInt(""+ (Math.random()*600));
+ }, 500);
+
+</script>
