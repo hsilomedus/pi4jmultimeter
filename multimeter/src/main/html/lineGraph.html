@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<head>
+<title>Waveline - pi4jmultimeter</title>
+<link rel="stylesheet" href="css/bootstrap.min.css" />
 <style>
 
 body {
@@ -24,6 +27,7 @@ body {
 }
 
 </style>
+</head>
 <body>
 <script src="js/d3.v3.min.js"></script>
 <script>
@@ -53,12 +57,18 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+var button = d3.select("body").append("div").append("a");
+button.text("Go back");
+button.style("margin-left", margin.left+"px");
+button.classed("btn", true).classed("btn-primary", true).classed("btn-lg", true);
+button.attr("href","index.html");
 	
 	
 //generate a bunch of random data
 //start with 50 dot's.
 var data = new Array();
-for (var i=0;i<50;i++) {
+for (var i=0;i<100;i++) {
 	data.push({x:i,y:0});
 }
 	

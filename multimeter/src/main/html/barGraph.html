@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<head>
+<title>Voltage graph - pi4jmultimeter</title>
+<link rel="stylesheet" href="css/bootstrap.min.css" />
 <style>
 
 body {
@@ -40,6 +43,7 @@ body {
 }
 
 </style>
+</head>
 <body>
 <script src="js/d3.v3.min.js"></script>
 
@@ -66,6 +70,12 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+var button = d3.select("body").append("div").append("a");
+button.text("Go back");
+button.style("margin-left", margin.left+"px");
+button.classed("btn", true).classed("btn-primary", true).classed("btn-lg", true);
+button.attr("href","index.html");
 
 //generate a bunch of random data
 //start with 50 dot's.
@@ -75,13 +85,7 @@ for (var i=0;i<50;i++) {
 }
 
 var lastReceivedValue = null;
-var socket = new WebSocket("ws://" + document.domain + ":8887/");
-socket.onopen = function() { console.log("Opened socket."); };
-socket.onclose = function() { console.log("Closed socket."); };
-socket.onerror = function() { console.log("Error during transfer."); };
-socket.onmessage = function(a) {
-  lastReceivedValue = a.data;
-}
+
 
   x.domain(data.map(function(d) { return d.x; }));
   y.domain([-5, 5]);
@@ -144,6 +148,14 @@ svg.append("rect")
       
 	  d3.select(".valueDiv").text(data[data.length-1].y.toFixed(2) + " V");
   
+  }
+  
+  var socket = new WebSocket("ws://" + document.domain + ":8887/");
+  socket.onopen = function() { console.log("Opened socket."); };
+  socket.onclose = function() { console.log("Closed socket."); };
+  socket.onerror = function() { console.log("Error during transfer."); };
+  socket.onmessage = function(a) {
+    lastReceivedValue = a.data;
   }
 
 //});
