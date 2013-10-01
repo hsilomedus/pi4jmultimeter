@@ -241,7 +241,8 @@ Serial.println("");*/
 
 char im[128], data[128], lastpass[64];
 char x=32, ylim=90;
-int i=0,val,nopack=0;
+int i=0, val1=0, val2=0, val3=0, nopack=0;
+
 void setup() {                                          
   Serial1.begin(115200);
   //Serial.println("Setup");
@@ -251,13 +252,23 @@ void setup() {
 void loop() {
   nopack++;
   
-  val = analogRead(A1);
+  //val1 - AC input
+  //val2 - DC input
+  //val3 - Resistance input
+  
+  //Read twice to see if this fixes multiplication issues.
+  val1 = analogRead(A1);
+  val1 = analogRead(A1);
+  val2 = analogRead(A2);
+  val2 = analogRead(A2);
+  val3 = analogRead(A3);
+  val3 = analogRead(A3);
   if (nopack % 5 == 0) {
     for (i=0; i < 128; i++) {                                     // We don't go for clean timing here, it's
-      val = analogRead(A1);                                      // better to get somewhat dirty data fast
+      val1 = analogRead(A1);                                      // better to get somewhat dirty data fast
       //values from 0 to 2.5-> 0 > 512,to be changed to -128 to 128
-      data[i] = val/2 - 128;
-      //data[i] = val/4 -128;                                       // than to get data that's lab-accurate
+      data[i] = val1/2 - 128;
+      //data[i] = val1/4 -128;                                       // than to get data that's lab-accurate
       im[i] = 0;                                                       // but too slow, for this application.
     }
     
@@ -272,11 +283,16 @@ void loop() {
     nopack = 0;
   }
   Serial1.print(" S ");
-  Serial1.print(val,HEX);
+  Serial1.print(val1,HEX);
+  Serial1.print(" ");
+  Serial1.print(val2,HEX);
+  Serial1.print(" ");
+  Serial1.print(val3,HEX);
   if (nopack==0) {
-    for (i=0; i < 20; i++) {
+    for (i=1; i < 21; i++) {
       Serial1.print(" ");
-      Serial1.print(data[i*2],HEX);
+      //should take an average or maximum of the three/or two
+      Serial1.print(max(max(data[i*3], data[i*3 + 1]), data[i*3 + 2]),HEX);
     }
   }
   Serial1.flush();

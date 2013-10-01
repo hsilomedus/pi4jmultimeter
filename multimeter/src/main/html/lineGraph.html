@@ -74,7 +74,7 @@ for (var i=0;i<100;i++) {
 	
 
   x.domain(d3.extent(data, function(d) { return d.x; }));
-  y.domain([-5,5]);
+  y.domain([-2.5,2.5]);
 
   svg.append("g")
       .attr("class", "y axis")
@@ -116,7 +116,7 @@ setInterval(function() {
     }
 		
 		data.splice(0,1);
-		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).v / 204.6)});
+		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).ac / 204.6) - 2.5});
 		
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i;

@@ -3,14 +3,20 @@ package mk.hsilomedus.multimeter;
 
 
 public class ReadValues {
-  public int value;
+  public int acValue;
+  public int dcValue;
+  public int resValue;
   public int[] bands = new int[20];
   
   @Override
   public String toString() {
     StringBuilder bld = new StringBuilder();
-    bld.append("{\"v\":");
-    bld.append(value);
+    bld.append("{\"ac\":");
+    bld.append(acValue);
+    bld.append(",\"dc\":");
+    bld.append(dcValue);
+    bld.append(",\"r\":");
+    bld.append(resValue);
     bld.append(",\"d\":[");
     for (int i = 0; i < bands.length; i++) {
       if (i > 0) {

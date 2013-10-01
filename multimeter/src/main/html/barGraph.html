@@ -88,7 +88,7 @@ var lastReceivedValue = null;
 
 
   x.domain(data.map(function(d) { return d.x; }));
-  y.domain([-5, 5]);
+  y.domain([0, 5]);
 
   svg.append("g")
       .attr("class", "y axis")
@@ -128,7 +128,7 @@ svg.append("rect")
 		}
 				
 		data.splice(0,1);
-		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).v / 204.6)});
+		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).dc / 204.6)});
 		
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i*(width/50);

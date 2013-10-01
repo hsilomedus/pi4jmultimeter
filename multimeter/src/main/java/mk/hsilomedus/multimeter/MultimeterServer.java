@@ -107,9 +107,13 @@ public class MultimeterServer extends WebSocketServer {
               num = Integer.parseInt(parts[i], 16);
             } catch (Exception exc) { }
             if (curValue == -1) {
-              readValues.value = num;
-            } else if (curValue < 20) {
-              readValues.bands[curValue] = num;
+              readValues.acValue = num;
+            } else if (curValue == 0) {
+              readValues.dcValue = num;
+            } else if (curValue == 1) {
+                readValues.resValue = num;
+            } else if (curValue < 22) {
+              readValues.bands[curValue - 2] = num;
             }
             curValue++;
           }
