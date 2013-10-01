@@ -90,7 +90,7 @@ setInterval(function(){
 	  data[0].v = 601;
 	} else {
 	  transValue = value / 204.6;
-	  data[0].v = 10.0*transValue / (5 - transValue);
+	  data[0].v = parseInt(9.79*transValue / (5 - transValue));
 	}
 
 },100);
