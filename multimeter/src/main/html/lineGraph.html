@@ -49,6 +49,7 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var line = d3.svg.line()
+    .interpolate("cardinal-open")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); });
 
@@ -69,7 +70,7 @@ button.attr("href","index.html");
 //start with 50 dot's.
 var data = new Array();
 for (var i=0;i<100;i++) {
-	data.push({x:i,y:0});
+	data.push({x:i,y:(i/20-2.5) * (i%6==5?-1:1)});
 }
 	
 
@@ -100,13 +101,6 @@ for (var i=0;i<100;i++) {
    .attr("fill", "orange");
 
 var lastReceivedValue = null;
-var socket = new WebSocket("ws://" + document.domain + ":8887/");
-socket.onopen = function() { console.log("Opened socket."); };
-socket.onclose = function() { console.log("Closed socket."); };
-socket.onerror = function() { console.log("Error during transfer."); };
-socket.onmessage = function(a) {
-  lastReceivedValue = a.data;
-}
 
 
 setInterval(function() {
@@ -127,5 +121,13 @@ setInterval(function() {
 		  .attr("class", "line")
 		  .attr("d", line);
 }, 20);
+
+var socket = new WebSocket("ws://" + document.domain + ":8887/");
+socket.onopen = function() { console.log("Opened socket."); };
+socket.onclose = function() { console.log("Closed socket."); };
+socket.onerror = function() { console.log("Error during transfer."); };
+socket.onmessage = function(a) {
+  lastReceivedValue = a.data;
+}
 
 </script>
