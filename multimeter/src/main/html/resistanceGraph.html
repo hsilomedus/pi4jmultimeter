@@ -150,10 +150,11 @@ svg.append("g")
 .attr("class", "x axis")
 .call(xAxis)
 .append("text")
-.attr("y", height + 2)
+.attr("x", width + 20)
+.attr("y", -2)
 .attr("dy", ".71em")
 .style("text-anchor", "end")
-.text("Ohms");
+.text("K"+ String.fromCharCode(937));
 
   update();
   

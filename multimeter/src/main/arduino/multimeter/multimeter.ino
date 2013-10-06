@@ -266,8 +266,12 @@ void loop() {
   if (nopack % 5 == 0) {
     for (i=0; i < 128; i++) {                                     // We don't go for clean timing here, it's
       val1 = analogRead(A1);                                      // better to get somewhat dirty data fast
-      //values from 0 to 2.5-> 0 > 512,to be changed to -128 to 128
-      data[i] = val1/2 - 128;
+      //values from 0 to 2.5-> 0 > 512,to be changed to -128 to 128 (old one)
+      //data[i] = val1/2 - 128;
+            
+      data[i] = val1/2 - 256;
+      
+      //orignal one: -128 -> 128
       //data[i] = val1/4 -128;                                       // than to get data that's lab-accurate
       im[i] = 0;                                                       // but too slow, for this application.
     }
@@ -292,7 +296,7 @@ void loop() {
     for (i=1; i < 21; i++) {
       Serial1.print(" ");
       //should take an average or maximum of the three/or two
-      Serial1.print(max(max(data[i*3], data[i*3 + 1]), data[i*3 + 2]),HEX);
+      Serial1.print(max(max(max(data[i*4], data[i*4 + 1]), data[i*4 + 2]), data[i*4 + 3]),HEX);
     }
   }
   Serial1.flush();

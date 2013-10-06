@@ -46,6 +46,12 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 
 var x = d3.scale.linear()
 .range([0, width]);
+x.domain([0, 5000]);
+
+var xAxis = d3.svg.axis()
+.scale(x)
+.orient("bottom");
+
 
 var y = d3.scale.linear()
 .range([height, 0]);
@@ -100,18 +106,17 @@ setInterval(function(){
 
 },100);
 
-  x.domain(data.map(function(d) { return d.x; }));
   y.domain([-64, 0]);
 
   svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("dB");
+      .call(yAxis);
+//     .append("text")
+//       .attr("transform", "rotate(-90)")
+//       .attr("y", 6)
+//       .attr("dy", ".71em")
+//       .style("text-anchor", "end")
+//       .text("dB");
   
   var selector = svg.selectAll(".bar")
   .data(data);
@@ -141,6 +146,17 @@ svg.append("rect")
  .attr("height", 4)
  .attr("width", width)
  .attr("fill", "orange");
+ 
+svg.append("g")
+.attr("transform", "translate(" + 0 + "," + (height + 2) + ")")
+.attr("class", "x axis")
+.call(xAxis)
+.append("text")
+.attr("x", width + 20)
+.attr("y", -2)
+.attr("dy", ".71em")
+.style("text-anchor", "end")
+.text("Hz");
 
   update();
   
