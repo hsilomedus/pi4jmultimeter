@@ -3,6 +3,7 @@
 <head>
 <title>Voltage graph - pi4jmultimeter</title>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
+<script type="text/javascript" src="js/general.js"></script>
 <style>
 
 body {
@@ -108,8 +109,6 @@ var lastReceivedValue = null;
   .attr("class", "bar")
   .attr("x", function(d) { return d.x; })
   .attr("width", width/50 - 1);
-  //.attr("y", function(d) { return y(d.y); })
-  //.attr("height", function(d) { return height - y(d.y); });
 
 selector.exit().remove();  
 
@@ -129,7 +128,10 @@ svg.append("rect")
 		}
 				
 		data.splice(0,1);
-		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).dc / 204.6)});
+		var valueObject = parseValueObject(lastReceivedValue);
+		
+		data.push({x:0, y:parseFloat(valueObject.dc / 204.6) * 0.75}); 
+		//0.75 factor added since the arduino for some unknown reasons sends a bigger value.
 		
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i*(width/50);
@@ -151,13 +153,7 @@ svg.append("rect")
   
   }
   
-  var socket = new WebSocket("ws://" + document.domain + ":8887/");
-  socket.onopen = function() { console.log("Opened socket."); };
-  socket.onclose = function() { console.log("Closed socket."); };
-  socket.onerror = function() { console.log("Error during transfer."); };
-  socket.onmessage = function(a) {
-    lastReceivedValue = a.data;
-  }
+  startClient();
 
 //});
 </script>

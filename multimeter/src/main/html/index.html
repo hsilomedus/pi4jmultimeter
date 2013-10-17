@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <title>pi4j Multimeter</title>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
+<script type="text/javascript" src="js/d3.v3.min.js"></script>
+<script type="text/javascript" src="js/general.js"></script>
 </head>
 
 <body style="width:100%">
@@ -25,6 +27,18 @@
     <small><a href="https://github.com/hsilomedus/pi4jmultimeter">pi4j Multimeter</a> by <a href="http://hsilomedus.me">hsilomedus</a></small>
   </span>
 </p>
+
+<script type="text/javascript">
+  //check here for the random parameter. If present, pass it to all the links.
+  
+  if (isRandomPage()) {  //there is one
+    d3.selectAll(".btn").attr("href", function(d,i) {
+      return d3.select(this).attr("href") + "?random=true";
+    });
+  }
+  
+
+</script>
 
 </body>
 

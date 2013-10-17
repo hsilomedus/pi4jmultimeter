@@ -3,6 +3,8 @@
 <head>
 <title>Waveline - pi4jmultimeter</title>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
+<script src="js/d3.v3.min.js"></script>
+<script type="text/javascript" src="js/general.js"></script>
 <style>
 
 body {
@@ -29,7 +31,6 @@ body {
 </style>
 </head>
 <body>
-<script src="js/d3.v3.min.js"></script>
 <script>
 
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -110,7 +111,9 @@ setInterval(function() {
     }
 		
 		data.splice(0,1);
-		data.push({x:0, y:parseFloat(JSON.parse(lastReceivedValue).ac / 204.6) - 2.5});
+		
+		var valueObject = parseValueObject(lastReceivedValue);
+		data.push({x:0, y:parseFloat(valueObject.ac / 204.6) - 2.5});
 		
 		for (var i=0; i<data.length;i++) {
 			data[i].x=i;
@@ -122,12 +125,6 @@ setInterval(function() {
 		  .attr("d", line);
 }, 20);
 
-var socket = new WebSocket("ws://" + document.domain + ":8887/");
-socket.onopen = function() { console.log("Opened socket."); };
-socket.onclose = function() { console.log("Closed socket."); };
-socket.onerror = function() { console.log("Error during transfer."); };
-socket.onmessage = function(a) {
-  lastReceivedValue = a.data;
-}
+startClient();
 
 </script>

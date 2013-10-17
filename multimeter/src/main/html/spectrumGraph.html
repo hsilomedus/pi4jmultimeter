@@ -3,6 +3,8 @@
 <head>
 <title>Spectrum graph - pi4jmultimeter</title>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
+<script src="js/d3.v3.min.js"></script>
+<script src="js/general.js"></script>
 <style>
 
 body {
@@ -35,7 +37,6 @@ body {
 </style>
 </head>
 <body>
-<script src="js/d3.v3.min.js"></script>
 
 
 <script type="text/javascript">
@@ -91,7 +92,7 @@ setInterval(function(){
 	if (lastReceivedValue == null) {
 	  return;
 	}
-	var value = JSON.parse(lastReceivedValue);
+	var value = parseValueObject(lastReceivedValue);
 	for (var i=0;i<20;i++) {
     data[i].y = value.d[i] - 64;
     
@@ -191,11 +192,5 @@ svg.append("g")
   
   }
   
-  var socket = new WebSocket("ws://" + document.domain + ":8887/");
-  socket.onopen = function() { console.log("Opened socket."); };
-  socket.onclose = function() { console.log("Closed socket."); };
-  socket.onerror = function() { console.log("Error during transfer."); };
-  socket.onmessage = function(a) {
-    lastReceivedValue = a.data;
-  }
+  startClient();
 </script>
